@@ -17,8 +17,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.box = "centos/7"
     master.vm.network "forwarded_port", guest: 8081, host: 8081
     master.vm.network "private_network", ip: "10.0.0.101"
-    master.vm.synced_folder "saltstack/salt/", "/srv/salt"
-    master.vm.synced_folder "saltstack/pillar/", "/srv/pillar"
+    master.vm.synced_folder "saltstack/salt/", "/srv/salt", type: "sshfs"
+    master.vm.synced_folder "saltstack/pillar/", "/srv/pillar", type: "sshfs"
     master.vm.provision "shell" do |s|
       s.inline = "echo $1 > /etc/hostname"
       s.args = "master"
@@ -32,6 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.verbose = true
       salt.colorize = true
     end
+    master.vm.provision "shell", inline: "salt-call state.highstate"
   end
   servers.each do |servers|
     config.vm.define servers["name"] do |srv|
@@ -48,6 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         salt.verbose = true
         salt.colorize = true
       end
+      srv.vm.provision "shell", inline: "salt-call state.highstate"
     end
   end
 end
