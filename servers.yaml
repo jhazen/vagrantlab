@@ -1,0 +1,7 @@
+---
+- name: app1
+  box: centos/7
+  ip: 10.0.0.102
+- name: app2
+  box: centos/7
+  ip: 10.0.0.103
