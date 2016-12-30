@@ -13,17 +13,17 @@ servers = YAML.load_file('servers.yaml')
 
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.define "master" do |master|
-    master.vm.box = "centos/7"
-    master.vm.network "forwarded_port", guest: 8081, host: 8081
-    master.vm.network "private_network", ip: "10.0.0.101"
-    master.vm.synced_folder "saltstack/salt/", "/srv/salt", type: "sshfs"
-    master.vm.synced_folder "saltstack/pillar/", "/srv/pillar", type: "sshfs"
-    master.vm.provision "shell" do |s|
+  config.vm.define "mst" do |mst|
+    mst.vm.box = "centos/7"
+    mst.vm.network "forwarded_port", guest: 8081, host: 8081
+    mst.vm.network "private_network", ip: "10.0.0.101"
+    mst.vm.synced_folder "saltstack/salt/", "/srv/salt", type: "sshfs"
+    mst.vm.synced_folder "saltstack/pillar/", "/srv/pillar", type: "sshfs"
+    mst.vm.provision "shell" do |s|
       s.inline = "echo $1 > /etc/hostname"
-      s.args = "master"
+      s.args = "mst"
     end
-	master.vm.provision :salt do |salt|
+	mst.vm.provision :salt do |salt|
       salt.master_config = "saltstack/etc/master"
       salt.install_type = "stable"
       salt.install_master = true
@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.verbose = true
       salt.colorize = true
     end
-    master.vm.provision "shell", inline: "salt-call state.highstate"
+    mst.vm.provision "shell", inline: "salt-call state.highstate"
   end
   servers.each do |servers|
     config.vm.define servers["name"] do |srv|
