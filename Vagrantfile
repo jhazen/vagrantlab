@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     mst.vm.synced_folder "saltstack/salt/", "/srv/salt", type: "sshfs"
     mst.vm.synced_folder "saltstack/pillar/", "/srv/pillar", type: "sshfs"
     mst.vm.provision "shell" do |s|
-      s.inline = "echo $1 > /etc/hostname"
+      s.inline = "hostnamectl set-hostname $1"
       s.args = "mst"
     end
 	mst.vm.provision :salt do |salt|
@@ -40,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.network "private_network", ip: servers["ip"]
       srv.vm.synced_folder '.', '/vagrant', disabled: true
       srv.vm.provision "shell" do |s|
-        s.inline = "echo $1 > /etc/hostname"
+        s.inline = "hostnamectl set-hostname $1"
         s.args = servers["name"]
       end
 	  srv.vm.provision :salt do |salt|
