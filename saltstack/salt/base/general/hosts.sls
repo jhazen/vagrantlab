@@ -1,4 +1,4 @@
 hosts:
   file.managed:
     - name: /etc/hosts
-    - source: salt://hosts.conf
+    - source: salt://general/hosts.conf
