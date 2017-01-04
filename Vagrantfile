@@ -11,6 +11,9 @@ require 'yaml'
 # Read YAML file with box details
 servers = YAML.load_file('servers.yaml')
 
+# Recreate hosts file based on servers.yaml
+system('./update_hostfile.py')
+
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "mst" do |mst|
