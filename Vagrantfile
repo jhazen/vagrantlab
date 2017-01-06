@@ -18,7 +18,7 @@ system('./update_hostfile.py')
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "mst" do |mst|
     mst.vm.box = "centos/7"
-    mst.vm.network "forwarded_port", guest: 8081, host: 8081
+    mst.vm.network "forwarded_port", guest: 80, host: 8081
     mst.vm.network "private_network", ip: "10.0.0.101"
     mst.vm.synced_folder "saltstack/salt/", "/srv/salt", type: "sshfs"
     mst.vm.synced_folder "saltstack/pillar/", "/srv/pillar", type: "sshfs"
