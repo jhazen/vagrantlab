@@ -12,9 +12,10 @@ appserver_packages:
       - python-pymongo
       - postgresql
       - python-psycopg2
-  npm:
-    pkg.installed:
-      - pkgs:
-        - mongoose
-        - mongodb
-        - pg
+
+mongoose:
+  npm.installed
+mongodb:
+  npm.installed
+pg:
+  npm.installed
