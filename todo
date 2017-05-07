@@ -1,1 +1,4 @@
-TODO: create service.sls for roles
+1. Allow servers.yml to provide box names
+2. Allow servers.yml to provide internal network details
+3. Move from libvirt to virtualbox
+4. Decouple salt-installation, to allow Windows/Junos/vEOS/etc
