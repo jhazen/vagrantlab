@@ -5,3 +5,9 @@
 - name: db1
   box: centos/7
   ip: 10.0.0.104
+- name: r1
+  box: CumulusCommunity/cumulus-vx
+  ip: 10.0.0.106
+- name: r2
+  box: CumulusCommunity/cumulus-vx
+  ip: 10.0.0.108

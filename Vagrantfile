@@ -46,11 +46,36 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         s.inline = "hostnamectl set-hostname $1"
         s.args = servers["name"]
       end
-	  srv.vm.provision :salt do |salt|
-        salt.install_type = "stable"
-        salt.minion_config = "saltstack/etc/minion"
-        salt.verbose = true
-        salt.colorize = true
+      if servers["box"] == "CumulusCommunity/cumulus-vx"
+          srv.vm.provision "shell" do |s|
+            s.inline = "echo '10.0.0.101 mst salt' >> /etc/hosts"
+          end
+          srv.vm.provision "shell" do |s|
+            s.inline = "echo $1 $2 >> /etc/hosts"
+            s.args = servers["ip"], servers["name"]
+          end
+          srv.vm.provision "shell" do |s|
+            s.inline = "wget -O - https://repo.saltstack.com/apt/debian/8/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add - > /dev/null 2>&1"
+          end
+          srv.vm.provision "shell" do |s|
+            s.inline = "echo 'deb https://repo.saltstack.com/apt/debian/8/amd64/latest jessie main' > /etc/apt/sources.list.d/saltstack.list"
+          end
+          srv.vm.provision "shell" do |s|
+            s.inline = "apt-get update"
+          end
+          srv.vm.provision "shell" do |s|
+            s.inline = "apt-get -y install salt-minion"
+          end
+          srv.vm.provision "shell" do |s|
+            s.inline = "systemctl start salt-minion"
+          end
+      else
+          srv.vm.provision :salt do |salt|
+            salt.install_type = "stable"
+            salt.minion_config = "saltstack/etc/minion"
+            salt.verbose = true
+            salt.colorize = true
+          end
       end
       srv.vm.provision "shell", inline: "salt-call state.highstate"
     end
