@@ -8,6 +8,12 @@
 - name: r1
   box: CumulusCommunity/cumulus-vx
   ip: 10.0.0.106
+  nics:
+    - net: INET1
+      ip: 192.168.0.1
 - name: r2
   box: CumulusCommunity/cumulus-vx
   ip: 10.0.0.108
+  nics:
+    - net: INET1
+      ip: 192.168.0.2
