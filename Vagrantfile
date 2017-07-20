@@ -45,6 +45,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.box = servers["box"]
       srv.vm.network "private_network", ip: servers["ip"]
       srv.vm.synced_folder '.', '/vagrant', type: "sshfs", disabled: true
+      if servers["wan"]
+        servers["wan"].each do |wan|
+          srv.vm.network "private_network", ip: wan["ip"]
+        end
+      end
       if servers["nics"]
         servers["nics"].each do |nics|
           srv.vm.network "private_network", ip: nics["ip"], virtualbox__intnet: nics["net"]

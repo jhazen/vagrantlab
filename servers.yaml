@@ -6,7 +6,7 @@
     - net: INET1
       ip: 10.0.0.2
 - name: win1
-  box: mwrock/Windows2012R2
+  box: opentable/win-2012r2-standard-amd64-nocm
   ip: 10.1.0.103
   nics:
     - net: INET2
@@ -29,10 +29,8 @@
       ip: 10.201.0.2
     - net: INET8
       ip: 10.202.0.2
-    - net: ENET1
+    - wan: vboxnet1
       ip: 172.16.0.1
-    - net: ENET2
-      ip: 172.16.1.1
 - name: r2
   box: juniper/ffp-12.1X47-D15.4-packetmode
   ip: 10.1.0.106
@@ -68,17 +66,3 @@
       ip: 10.101.0.2
     - net: INET8
       ip: 10.202.0.1
-- name: i1
-  box: CumulusCommunity/cumulus-vx
-  ip: 10.1.0.109
-  salt: manual
-  nics:
-    - net: ENET1
-      ip: 172.16.0.2
-- name: i2
-  box: veos
-  ip: 10.1.0.110
-  salt: false
-  nics:
-    - net: ENET2
-      ip: 172.16.1.2
