@@ -1,2 +1,2 @@
 name "web"
-run_list "recipe[myweb]"
+run_list "recipe[web]"

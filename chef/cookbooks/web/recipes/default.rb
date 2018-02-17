@@ -24,12 +24,13 @@ directory '/var/www/html' do
   mode '0755'
   recursive true
   action :create
-  notifies :run, 'cookbook_file[/var/www/html/index.html]'
+  notifies :create, 'cookbook_file[/var/www/html/index.html]'
 end
 
 cookbook_file "/var/www/html/index.html" do
   source "index.html"
   mode "0644"
+  action :create
 end
 
 template "/etc/nginx/nginx.conf" do

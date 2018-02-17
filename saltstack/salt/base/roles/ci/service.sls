@@ -1,5 +1,5 @@
 jenkins:
   service.running:
-    - enabled: True
+    - enable: True
     - watch:
       - ci_packages

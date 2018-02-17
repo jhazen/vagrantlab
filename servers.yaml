@@ -3,6 +3,8 @@
   box: centos/7
   ip: 10.1.0.102
   salt: true
+  provision: salt
+  role: ci
   nics:
     - net: INET1
       ip: 10.0.0.2
@@ -10,7 +12,8 @@
   box: centos/7
   ip: 10.1.0.106
   chef: true
-  chefrole: web
+  provision: chef
+  role: web
   nics:
     - net: INET1
       ip: 10.0.0.3

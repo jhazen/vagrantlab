@@ -55,21 +55,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           srv.vm.network "private_network", ip: nics["ip"], virtualbox__intnet: nics["net"]
         end
       end
-      if servers["salt"] == true
+      if servers["provision"] == "salt"
         srv.vm.provision :salt do |salt|
           salt.install_type = "stable"
           salt.minion_config = "saltstack/etc/minion"
           salt.verbose = true
           salt.colorize = true
+          if servers["role"]
+            srv.vm.provision "shell" do |s|
+              s.inline = "salt-call grains.append roles $1"
+              s.args = servers["role"]
+            end
+          end
           srv.vm.provision "shell", inline: "salt-call state.highstate"
         end
-      end
-      if servers["chef"] == true
+      elsif servers["provision"] == "chef"
         srv.vm.provision "chef_solo" do |chef|
-            chef.synced_folder_type = "sshfs" 
+          chef.synced_folder_type = "sshfs" 
           chef.cookbooks_path = "chef/cookbooks"
           chef.roles_path = "chef/roles"
-          chef.add_role(servers["chefrole"])
+          if servers["role"]
+            chef.add_role(servers["role"])
+          end
         end
       end
     end
