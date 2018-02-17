@@ -20,7 +20,6 @@
 - name: r1
   box: juniper/ffp-12.1X47-D15.4-packetmode
   ip: 10.1.0.105
-  salt: false
   nics:
     - net: INET1
       ip: 10.0.0.1
