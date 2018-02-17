@@ -55,40 +55,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           srv.vm.network "private_network", ip: nics["ip"], virtualbox__intnet: nics["net"]
         end
       end
-      if servers["salt"] == false
-        pass
-      elsif servers["salt"] == "manual"
-        srv.vm.provision "shell" do |s|
-          s.inline = "echo '10.1.0.101 mst1 salt' >> /etc/hosts"
-        end
-        srv.vm.provision "shell" do |s|
-          s.inline = "echo $1 $2 >> /etc/hosts"
-          s.args = servers["ip"], servers["name"]
-        end
-        srv.vm.provision "shell" do |s|
-          s.inline = "wget -O - https://repo.saltstack.com/apt/debian/8/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add - > /dev/null 2>&1"
-        end
-        srv.vm.provision "shell" do |s|
-          s.inline = "echo 'deb https://repo.saltstack.com/apt/debian/8/amd64/latest jessie main' > /etc/apt/sources.list.d/saltstack.list"
-        end
-        srv.vm.provision "shell" do |s|
-          s.inline = "apt-get update"
-        end
-        srv.vm.provision "shell" do |s|
-          s.inline = "apt-get -y install salt-minion"
-        end
-        srv.vm.provision "shell" do |s|
-          s.inline = "systemctl start salt-minion"
-        end
-        srv.vm.provision "shell", inline: "salt-call state.highstate"
-      else
+      if servers["salt"] == true
         srv.vm.provision :salt do |salt|
           salt.install_type = "stable"
           salt.minion_config = "saltstack/etc/minion"
           salt.verbose = true
           salt.colorize = true
+          srv.vm.provision "shell", inline: "salt-call state.highstate"
         end
-        srv.vm.provision "shell", inline: "salt-call state.highstate"
+      end
+      if servers["chef"] == true
+        srv.vm.provision "chef_solo" do |chef|
+            chef.synced_folder_type = "sshfs" 
+          chef.cookbooks_path = "chef/cookbooks"
+          chef.roles_path = "chef/roles"
+          chef.add_role(servers["chefrole"])
+        end
       end
     end
   end
