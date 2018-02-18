@@ -38,6 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.verbose = true
       salt.colorize = true
     end
+    mst1.vm.provision "shell", inline: "salt-call grains.append roles ci"
     mst1.vm.provision "shell", inline: "salt-call state.highstate"
   end
   servers.each do |servers|
