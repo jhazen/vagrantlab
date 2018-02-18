@@ -4,7 +4,7 @@
   ip: 10.1.0.102
   salt: true
   provision: salt
-  role: ci
+  role: wildfly11
   nics:
     - net: INET1
       ip: 10.0.0.2

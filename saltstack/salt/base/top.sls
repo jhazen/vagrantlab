@@ -29,3 +29,7 @@ base:
   'roles:db':
   - match: grain
   - roles.dbserver
+
+  'roles:wildfly11':
+  - match: grain
+  - roles.wildfly11
