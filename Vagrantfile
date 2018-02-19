@@ -40,6 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     mst1.vm.provision "shell", inline: "salt-call grains.append roles ci"
     mst1.vm.provision "shell", inline: "salt-call state.highstate"
+    mst1.vm.network "forwarded_port", guest: 8080, host: 8080
   end
   servers.each do |servers|
     config.vm.define servers["name"] do |srv|
