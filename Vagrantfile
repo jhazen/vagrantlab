@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
 
-# Specify minimum Vagrant version and Vagrant API version
+        # Specify minimum Vagrant version and Vagrant API version
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
 
@@ -57,10 +57,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           srv.vm.network "private_network", ip: nics["ip"], virtualbox__intnet: nics["net"]
         end
       end
+      srv.vm.provision "shell" do |s|
+        s.inline = "hostnamectl set-hostname $1"
+        s.args = servers["name"]
+      end
       if servers["provision"] == "salt"
         srv.vm.provision :salt do |salt|
           salt.install_type = "stable"
           salt.minion_config = "saltstack/etc/minion"
+          salt.minion_id = servers["name"]
           salt.verbose = true
           salt.colorize = true
           if servers["role"]
@@ -73,7 +78,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
       elsif servers["provision"] == "chef"
         srv.vm.provision "chef_solo" do |chef|
-          chef.synced_folder_type = "sshfs" 
+          chef.synced_folder_type = "sshfs"
           chef.cookbooks_path = "chef/cookbooks"
           chef.roles_path = "chef/roles"
           if servers["role"]

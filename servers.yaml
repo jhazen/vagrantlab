@@ -2,7 +2,6 @@
 - name: app1
   box: centos/7
   ip: 10.1.0.102
-  salt: true
   provision: salt
   role: wildfly11
   nics:
@@ -11,12 +10,16 @@
 - name: app2
   box: centos/7
   ip: 10.1.0.106
-  chef: true
   provision: chef
   role: web
   nics:
     - net: INET1
       ip: 10.0.0.3
+- name: db1
+  box: centos/7
+  ip: 10.1.0.104
+  provision: salt
+  role: db
 - name: r1
   box: juniper/ffp-12.1X47-D15.4-packetmode
   ip: 10.1.0.105
