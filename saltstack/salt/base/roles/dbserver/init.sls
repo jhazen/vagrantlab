@@ -1,2 +1,4 @@
 include:
   - .packages
+  - .config
+  - .service
