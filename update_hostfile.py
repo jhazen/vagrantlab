@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import yaml
 import os
 
-s = file('servers.yaml')
+s = open('servers.yaml')
 d = yaml.load_all(s)
 
 # Delete hosts.conf, if it exists
