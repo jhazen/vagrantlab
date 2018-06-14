@@ -26,4 +26,11 @@
   role: juniper
   nics:
     - net: INET1
+      ip: 192.168.100.10
+- name: r2
+  box: juniper/vqfx10k-re
+  ip: 192.168.200.107
+  role: juniper
+  nics:
+    - net: INET1
       ip: 192.168.100.11
