@@ -15,7 +15,7 @@ hostfile = "saltstack/salt/base/general/hosts.conf"
 # Static routes
 with open(hostfile, 'a') as f:
     f.write('127.0.0.1 localhost\n')
-    f.write('10.1.0.101 mst1\n')
+    f.write('192.168.200.11 mst1\n')
 
 # Routes for all servers in servers.yaml
 for boxes in d:

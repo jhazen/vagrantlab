@@ -19,12 +19,13 @@ end
 
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.ssh.insert_key = false
   config.nfs.functional = false
   config.vm.define "mst1" do |mst1|
     mst1.vm.box = "centos/7"
-    mst1.vm.network "private_network", ip: "10.1.0.101"
-    mst1.vm.synced_folder "saltstack/salt/", "/srv/salt", type: "sshfs"
-    mst1.vm.synced_folder "saltstack/pillar/", "/srv/pillar", type: "sshfs"
+    mst1.vm.network "private_network", ip: "192.168.200.11"
+    mst1.vm.synced_folder "saltstack/salt/", "/srv/salt", type: "rsync"
+    mst1.vm.synced_folder "saltstack/pillar/", "/srv/pillar", type: "rsync"
     mst1.vm.provision "shell" do |s|
       s.inline = "hostnamectl set-hostname $1"
       s.args = "mst1"
@@ -45,7 +46,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   servers.each do |servers|
     config.vm.define servers["name"] do |srv|
       srv.vm.box = servers["box"]
-      srv.vm.network "private_network", ip: servers["ip"]
+      srv.vm.hostname = servers["name"]
+      if servers["role"] == "juniper"
+        srv.vm.network "private_network", ip: servers["ip"], auto_config: false, nic_type: '82540EM'
+      else
+        srv.vm.network "private_network", ip: servers["ip"]
+      end
       srv.vm.synced_folder '.', '/vagrant', type: "sshfs", disabled: true
       if servers["forwarded_port"]
         servers["forwarded_port"].each do |forwarded_port|
@@ -54,19 +60,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
       if servers["wan"]
         servers["wan"].each do |wan|
-          srv.vm.network "private_network", ip: wan["ip"]
+          if servers["role"] == "juniper"
+            srv.vm.network "private_network", ip: wan["ip"], auto_config: false, nic_type: '82540EM'
+          else
+            srv.vm.network "private_network", ip: wan["ip"]
+          end
         end
       end
       if servers["nics"]
         servers["nics"].each do |nics|
-          srv.vm.network "private_network", ip: nics["ip"], virtualbox__intnet: nics["net"]
+          if servers["role"] == "juniper"
+            srv.vm.network "private_network", ip: nics["ip"], virtualbox__intnet: nics["net"], auto_config: false, nic_type: '82540EM'
+          else
+            srv.vm.network "private_network", ip: nics["ip"], virtualbox__intnet: nics["net"]
+          end
         end
       end
-      srv.vm.provision "shell" do |s|
-        s.inline = "hostnamectl set-hostname $1"
-        s.args = servers["name"]
-      end
       if servers["provision"] == "salt"
+        srv.vm.provision "shell" do |s|
+          s.inline = "hostnamectl set-hostname $1"
+          s.args = servers["name"]
+        end
         srv.vm.provision :salt do |salt|
           salt.install_type = "stable"
           salt.minion_config = "saltstack/etc/minion"
@@ -82,6 +96,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           srv.vm.provision "shell", inline: "salt-call state.highstate"
         end
       elsif servers["provision"] == "chef"
+        srv.vm.provision "shell" do |s|
+          s.inline = "hostnamectl set-hostname $1"
+          s.args = servers["name"]
+        end
         srv.vm.provision "chef_solo" do |chef|
           chef.synced_folder_type = "sshfs"
           chef.cookbooks_path = "chef/cookbooks"
