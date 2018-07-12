@@ -34,3 +34,30 @@
   nics:
     - net: INET1
       ip: 192.168.100.11
+    - net: INET2
+      ip: 192.168.101.11
+    - net: INET3
+      ip: 192.168.102.11
+    - net: INET4
+      ip: 192.168.103.11
+    - net: INET5
+      ip: 192.168.104.11
+    - net: INET6
+      ip: 192.168.105.11
+- name: r3
+  box: juniper/vqfx10k-re
+  ip: 192.168.200.108
+  role: juniper
+  nics:
+    - net: INET1
+      ip: 192.168.100.12
+    - net: INET2
+      ip: 192.168.101.12
+    - net: INET3
+      ip: 192.168.102.12
+    - net: INET4
+      ip: 192.168.103.12
+    - net: INET5
+      ip: 192.168.104.12
+    - net: INET6
+      ip: 192.168.105.12
