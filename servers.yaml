@@ -14,7 +14,15 @@
   role: web
   nics:
     - net: INET1
-      ip: 192.168.100.13
+      ip: 192.168.100.16
+- name: build1
+  box: centos/7
+  provision: chef
+  role: build
+  ip: 192.168.200.109
+  nics:
+    - net: INET1
+      ip: 192.168.100.19
 - name: db1
   box: centos/7
   ip: 192.168.200.104
@@ -26,38 +34,38 @@
   role: juniper
   nics:
     - net: INET1
-      ip: 192.168.100.10
+      ip: 192.168.100.15
 - name: r2
   box: juniper/vqfx10k-re
   ip: 192.168.200.107
   role: juniper
   nics:
     - net: INET1
-      ip: 192.168.100.11
+      ip: 192.168.100.17
     - net: INET2
-      ip: 192.168.101.11
+      ip: 192.168.101.17
     - net: INET3
-      ip: 192.168.102.11
+      ip: 192.168.102.17
     - net: INET4
-      ip: 192.168.103.11
+      ip: 192.168.103.17
     - net: INET5
-      ip: 192.168.104.11
+      ip: 192.168.104.17
     - net: INET6
-      ip: 192.168.105.11
+      ip: 192.168.105.17
 - name: r3
   box: juniper/vqfx10k-re
   ip: 192.168.200.108
   role: juniper
   nics:
     - net: INET1
-      ip: 192.168.100.12
+      ip: 192.168.100.18
     - net: INET2
-      ip: 192.168.101.12
+      ip: 192.168.101.18
     - net: INET3
-      ip: 192.168.102.12
+      ip: 192.168.102.18
     - net: INET4
-      ip: 192.168.103.12
+      ip: 192.168.103.18
     - net: INET5
-      ip: 192.168.104.12
+      ip: 192.168.104.18
     - net: INET6
-      ip: 192.168.105.12
+      ip: 192.168.105.18
