@@ -1,0 +1,21 @@
+ghostios = True
+sparsemem = True
+
+[localhost]
+    [[3660]]
+        image = C3660-I-.BIN
+        slot1 = NM-16ESW
+        slot2 = NM-4T
+        ram = 192
+    
+    [[ROUTER R1]]
+        model = 3660
+        f0/0 = NIO_linux_eth:vboxnet0
+        s2/0 = R2 s2/0
+        idlepc = 0x606b3964
+
+    [[ROUTER R2]]
+        model = 3660
+        f0/0 = NIO_linux_eth:vboxnet0
+        s2/0 = R1 s2/0
+        idlepc = 0x606b3964
