@@ -69,3 +69,10 @@
       ip: 192.168.104.18
     - net: INET6
       ip: 192.168.105.18
+- name: analysis1
+  box: centos/7
+  ip: 192.168.200.150
+  provision: salt
+  temp: true
+  role: analysis
+

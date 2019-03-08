@@ -14,6 +14,9 @@ base:
   'lb*':
   - roles.lb
 
+  'analysis*':
+  - roles.lb
+
   'roles:lb':
   - match: grain
   - roles.lb
@@ -25,6 +28,10 @@ base:
   'roles:app':
   - match: grain
   - roles.appserver
+
+  'roles:analysis':
+  - match: grain
+  - roles.analysis
 
   'roles:db':
   - match: grain
